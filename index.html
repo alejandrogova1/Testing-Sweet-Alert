@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery</title>
+</head>
+<body>
+    <form id="form1" action="" method="post">
+        <input type="text" name="nombre" id="nombre">
+        <select name="status" id="status">
+            <option value="success">Success</option>
+            <option value="error">Error</option>
+        </select>
+        <input type="submit" value="Enviar">
+    </form>
+
+    <!-- jQuery 3.6.0 min-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Sweet Alert-->
+    <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $("#form1").submit(function(e) {
+                e.preventDefault();
+                
+                // Serialize the data in the form
+                var $form = $(this);
+                var serializedData = $form.serialize();
+                
+                $.ajax({
+                    type:'POST',
+                    data:serializedData,
+                    url:'data.php',
+                    success:function(respuesta) {
+                        respuesta=JSON.parse(respuesta);
+                        Swal.fire(respuesta.mensaje,'',respuesta.status);
+                    },
+                    error: function (jqXHR, exception) {
+                        Swal.fire(jqXHR.responseText, '', 'error');
+                    }
+                });
+                
+            });
+        });
+    </script>
+
+</body>
+</html>
